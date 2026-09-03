@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.DS_Store
+
+# 本地克隆源仓库副本（不参与本仓库跟踪）
+/hamster-skin-skill/

@@ -1,0 +1,157 @@
+[
+  {
+    "bookSourceComment": "作者: minis｜修复发现页封面(容器修正+域名修正)｜新增SF轻小说发现页(9分类)｜优化版",
+    "bookSourceGroup": "Minis",
+    "bookSourceName": "SF轻小说",
+    "bookSourceType": 0,
+    "bookSourceUrl": "http://book.sfacg.com",
+    "customOrder": 934,
+    "enabled": true,
+    "enabledCookieJar": true,
+    "enabledExplore": true,
+    "exploreUrl": "玄幻小说::/List/default.aspx?tid=22&PageIndex={{page}}\n魔幻小说::/List/default.aspx?tid=21&PageIndex={{page}}\n古风小说::/List/default.aspx?tid=23&PageIndex={{page}}\n科幻小说::/List/default.aspx?tid=24&PageIndex={{page}}\n校园小说::/List/default.aspx?tid=25&PageIndex={{page}}\n都市小说::/List/default.aspx?tid=26&PageIndex={{page}}\n游戏小说::/List/default.aspx?tid=27&PageIndex={{page}}\n同人小说::/List/default.aspx?tid=28&PageIndex={{page}}\n悬疑小说::/List/default.aspx?tid=29&PageIndex={{page}}",
+    "lastUpdateTime": "1681943062931",
+    "respondTime": 1176,
+    "ruleBookInfo": {
+      "coverUrl": "class.summary-pic@tag.img@src",
+      "intro": "class.d-summary@class.introduce@text",
+      "name": "class.d-summary@h1.title@text",
+      "author": "class.d-summary@class.author-name@span@text",
+      "tocUrl": "class.d-summary@text.点击阅读@href"
+    },
+    "ruleContent": {
+      "content": "class.article-content font16@html"
+    },
+    "ruleExplore": {
+      "bookList": "class.Comic_Pic_List",
+      "bookUrl": "tag.li.0@tag.a@href",
+      "coverUrl": "tag.li.0@tag.img@src",
+      "name": "tag.li.1@tag.a.0@text",
+      "author": "tag.li.1@tag.a.1@text",
+      "kind": "tag.li.1@tag.a.2@text",
+      "intro": "tag.li.1@text##作 者：.*?字"
+    },
+    "ruleSearch": {
+      "author": "tag.br@text##.综合信息：|\\/.*",
+      "bookList": "tag.ul",
+      "bookUrl": "tag.a@href",
+      "coverUrl": "tag.img@src",
+      "name": "tag.a.0@text"
+    },
+    "ruleToc": {
+      "chapterList": "class.catalog-list@tag.li",
+      "chapterName": "tag.a@text",
+      "chapterUrl": "tag.a@href"
+    },
+    "searchUrl": "http://s.sfacg.com/?Key={{key}}&S=1&SS=0",
+    "storageKind": 0,
+    "weight": 0
+  },
+  {
+    "bookSourceComment": "作者: minis｜修复发现页封面:容器改class.item+补coverUrl",
+    "bookSourceGroup": "Minis",
+    "bookSourceName": "鬼吹灯",
+    "bookSourceType": 0,
+    "bookSourceUrl": "http://www.gdbzkz.info",
+    "customOrder": 1145,
+    "enabled": true,
+    "enabledCookieJar": true,
+    "enabledExplore": true,
+    "exploreUrl": "玄幻小说::/fenlei/1/{{page}}.html\n仙侠小说::/fenlei/2/{{page}}.html\n都市小说::/fenlei/3/{{page}}.html\n军史小说::/fenlei/4/{{page}}.html\n网游小说::/fenlei/5/{{page}}.html\n科幻小说::/fenlei/6/{{page}}.html\n恐怖小说::/fenlei/7/{{page}}.html",
+    "lastUpdateTime": "1785735108442",
+    "loginUrl": "",
+    "respondTime": 8433,
+    "ruleBookInfo": {
+      "author": "class.small@tag.span.0@text##作 者：",
+      "coverUrl": "class.cover@img@src",
+      "init": "",
+      "intro": "class.intro@textNodes##作者.*|无弹窗.*",
+      "kind": "[property=og:novel:update_time]@content&&\n[property=og:novel:category]@content&&\n[property=og:novel:status]@content ",
+      "lastChapter": "class.small@tag.span.5@a@text##百度搜索.*",
+      "name": "class.info@h2@text##\\（.*|\\(.*|免费阅读|全文.*阅读|最新章节|笔趣阁|小说",
+      "wordCount": "class.info@class.small@tag.span.3@text##字数："
+    },
+    "ruleContent": {
+      "content": "id.content@html##http.*html|天才一秒记住.*org|请记住本书首发域.*org"
+    },
+    "ruleExplore": {
+      "author": "class.p10@tag.dl@tag.dt@tag.span@text",
+      "bookList": "class.item",
+      "bookUrl": "class.p10@class.image@tag.a@href",
+      "coverUrl": "class.p10@class.image@tag.img@src",
+      "intro": "class.p10@tag.dl@tag.dd@textNodes",
+      "kind": "class.p10@tag.dl@tag.dt@tag.span@text",
+      "name": "class.p10@tag.dl@tag.dt@tag.a@text"
+    },
+    "ruleSearch": {
+      "author": "class.author@text##作者：",
+      "bookList": "class.bookbox@class.p10",
+      "bookUrl": "class.bookname@tag.a@href",
+      "coverUrl": "class.bookimg@img@src",
+      "intro": "class.bookinfo@p@text",
+      "kind": "class.cat@text##分类：",
+      "lastChapter": "class.update@tag.a@text##百度搜索.*",
+      "name": "class.bookname@tag.a@text##\\（.*|\\(.*|免费阅读|全文.*阅读|最新章节|笔趣阁|小说"
+    },
+    "ruleToc": {
+      "chapterList": "class.listmain@dd!0:1:2:3:4:5:6:7:8:9:10:11",
+      "chapterName": "tag.a@text",
+      "chapterUrl": "tag.a@href"
+    },
+    "searchUrl": "http://www.gdbzkz.info/s.php?ie=utf-8&q={{key}}",
+    "storageKind": 0,
+    "weight": 0
+  },
+  {
+    "bookSourceComment": "作者: minis｜修复发现页封面:封面域改http的.net/info",
+    "bookSourceGroup": "Minis",
+    "bookSourceName": "爱笔楼",
+    "bookSourceType": 0,
+    "bookSourceUrl": "http://www.ibiquge.info/",
+    "bookUrlPattern": "https://www.ibiquge.net/\\d+_\\d+/",
+    "customOrder": 1440,
+    "enabled": true,
+    "enabledCookieJar": true,
+    "enabledExplore": true,
+    "exploreUrl": "[{\"title\":\"玄幻奇幻\",\"url\":\"/xuanhuanxiaoshuo/1_{{page}}.html\",\"style\":{\"layout_flexGrow\":1,\"layout_flexBasisPercent\":0.25}},{\"title\":\"修真仙侠\",\"url\":\"/xiuzhenxiaoshuo/2_{{page}}.html\",\"style\":{\"layout_flexGrow\":1,\"layout_flexBasisPercent\":0.25}},{\"title\":\"都市青春\",\"url\":\"/dushixiaoshuo/3_{{page}}.html\",\"style\":{\"layout_flexGrow\":1,\"layout_flexBasisPercent\":0.25}},{\"title\":\"历史军事\",\"url\":\"/lishixiaoshuo/4_{{page}}.html\",\"style\":{\"layout_flexGrow\":1,\"layout_flexBasisPercent\":0.25}},{\"title\":\"网游竞技\",\"url\":\"/wangyouxiaoshuo/5_{{page}}.html\",\"style\":{\"layout_flexGrow\":1,\"layout_flexBasisPercent\":0.25}},{\"title\":\"科幻灵异\",\"url\":\"/kehuanxiaoshuo/6_{{page}}.html\",\"style\":{\"layout_flexGrow\":1,\"layout_flexBasisPercent\":0.25}},{\"title\":\"其它小说\",\"url\":\"/qitaxiaoshuo/7_{{page}}.html\",\"style\":{\"layout_flexGrow\":0,\"layout_flexBasisPercent\":0.295}}]",
+    "lastUpdateTime": "1686047121608",
+    "loginUrl": "",
+    "respondTime": 4331,
+    "ruleBookInfo": {
+      "author": "id.info@tag.p.0@a@text",
+      "coverUrl": "id.fmimg@tag.img@src",
+      "intro": "id.intro@text",
+      "kind": "id.info@tag.p.2@text##最后更新：",
+      "lastChapter": "id.info@tag.p.3@a@text##免费章节 |正文卷 |正文 |VIP章节 ",
+      "name": "id.info@h1@text"
+    },
+    "ruleContent": {
+      "content": "id.content@html##天才一秒记住.*无广告！|断更反馈|章节错误.*请耐心等待。"
+    },
+    "ruleExplore": {
+      "author": "class.s4@tag.a@text",
+      "bookList": "class.l@ul@li",
+      "bookUrl": "class.s2@tag.a@href",
+      "coverUrl": "class.s2@tag.a@href<js>\nvar id = result.match(/(\\d+)\\/?$/)[1];\nvar iid = parseInt(id/1000);\n'http://www.ibiquge.net/files/article/image/'+iid+'/'+id+'/'+id+'s.jpg';\n</js>",
+      "kind": "class.s5@text",
+      "lastChapter": "class.s3@tag.a@text##免费章节 |正文卷 |正文 |VIP章节 ",
+      "name": "class.s2@tag.a@text"
+    },
+    "ruleSearch": {
+      "author": "class.s4@tag.a@text",
+      "bookList": "class.novelslist2@tag.li!0",
+      "bookUrl": "class.s2@tag.a@href",
+      "coverUrl": "class.s2@tag.a@href<js>\nvar id = result.match(/(\\d+)\\/?$/)[1];\nvar iid = parseInt(id/1000);\n'http://www.ibiquge.net/files/article/image/'+iid+'/'+id+'/'+id+'s.jpg';\n</js>",
+      "lastChapter": "class.s3@tag.a@text##免费章节 |正文卷 |正文 |VIP章节 ",
+      "name": "class.s2@tag.a@text"
+    },
+    "ruleToc": {
+      "chapterList": "id.list@tag.dd",
+      "chapterName": "tag.a@text",
+      "chapterUrl": "tag.a@href"
+    },
+    "searchUrl": "/search.html?name={{key}}",
+    "storageKind": 0,
+    "weight": 0
+  }
+]

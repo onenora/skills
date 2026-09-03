@@ -1,0 +1,96 @@
+{
+  "skill_name": "heart-sources",
+  "evals": [
+    {
+      "id": "commonjs-index",
+      "prompt": "common.js 有哪些函数？",
+      "expected_output": "优先从本地 references / knowledge base 回答，并给出相关入口。",
+      "files": [],
+      "assertions": [
+        {"type": "contains", "text": "common.js"}
+      ]
+    },
+    {
+      "id": "template-json",
+      "prompt": "给我一个书源标准模板 json。",
+      "expected_output": "优先使用内置 site-template.full.json 或模板说明。",
+      "files": [],
+      "assertions": [
+        {"type": "contains", "text": "json"},
+        {"type": "contains", "text": "template"}
+      ]
+    },
+    {
+      "id": "write-source-flow",
+      "prompt": "帮我给一个小说站写用心读书书源。",
+      "expected_output": "应按写源流程：采样页面、判断搜索方式、设计搜索/详情/目录/正文规则、处理分页和清洗、做结构自检。",
+      "files": [],
+      "assertions": [
+        {"type": "contains", "text": "搜索"},
+        {"type": "contains", "text": "目录"},
+        {"type": "contains", "text": "正文"},
+        {"type": "contains", "text": "自检"}
+      ]
+    },
+    {
+      "id": "debug-empty-content",
+      "prompt": "正文规则取不到内容怎么排查？",
+      "expected_output": "应检查请求、HTML/JSON、正文是否直出、contents、分页、cleaner/正则/JS 是否误删。",
+      "files": [],
+      "assertions": [
+        {"type": "contains", "text": "请求"},
+        {"type": "contains", "text": "contents"},
+        {"type": "contains", "text": "分页"},
+        {"type": "contains", "text": "cleaner"}
+      ]
+    },
+    {
+      "id": "pagination-next",
+      "prompt": "正文下一页和下一章怎么避免串章？",
+      "expected_output": "应说明 next/page、下一页/下一章文本区分、URL 形态、停止条件。",
+      "files": [],
+      "assertions": [
+        {"type": "contains", "text": "next"},
+        {"type": "contains", "text": "下一页"},
+        {"type": "contains", "text": "下一章"},
+        {"type": "contains", "text": "串章"}
+      ]
+    },
+    {
+      "id": "source-checklist",
+      "prompt": "生成书源后要检查哪些字段？",
+      "expected_output": "应列出顶层字段和 ruleSearch/ruleBookInfo/ruleChapter/ruleContent 的关键字段。",
+      "files": [],
+      "assertions": [
+        {"type": "contains", "text": "siteName"},
+        {"type": "contains", "text": "host"},
+        {"type": "contains", "text": "ruleSearch"},
+        {"type": "contains", "text": "ruleChapter"},
+        {"type": "contains", "text": "ruleContent"}
+      ]
+    },
+    {
+      "id": "post-search",
+      "prompt": "搜索是 POST 的站点怎么写规则？",
+      "expected_output": "应说明 method=POST、url、params、关键词变量、返回类型和 bookList。",
+      "files": [],
+      "assertions": [
+        {"type": "contains", "text": "POST"},
+        {"type": "contains", "text": "params"},
+        {"type": "contains", "text": "keyword"},
+        {"type": "contains", "text": "bookList"}
+      ]
+    },
+    {
+      "id": "pre-request-debug",
+      "prompt": "需要先请求 token 的书源怎么设计？",
+      "expected_output": "应说明前置请求、提取值、保存 key、正式请求读取和 token 时效。",
+      "files": [],
+      "assertions": [
+        {"type": "contains", "text": "前置请求"},
+        {"type": "contains", "text": "token"},
+        {"type": "contains", "text": "key"}
+      ]
+    }
+  ]
+}
