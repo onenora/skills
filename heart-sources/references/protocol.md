@@ -96,13 +96,25 @@ App 生成模板附加字段：`ruleSearch.requestType`(规则类型，默认 0)
 - 写回：JS `window.ParsingBook.setOpenParamValue(key, v)` / `setOpenParamValues({...})`；HTML 事件 `@setOpenParams('k','v')`。
 - `loginUrl` 本地 `@html:` 可用：`@{siteName}` `@{siteIdent}` `@{host}` `@{deviceId}` `@{openParams.x}`；尾随 `,{"domains":[...]}` 收集额外域名 Cookie；是本地页范式时 `window.ParsingBook` bridge 可用。
 
-## 7.5 听书源（`type: 4`）与真实源验证能力细节
+## 7.5 听书源（`type 2/4`）与真实源验证能力细节
 
 **听书源**（参考源：同站同结构，搜索用 `request @js:` 改 `config.url/params` 区分音书类型）
 
-- `type: 4`；`ruleContent.playUrl` 提取音频地址（jsonpath 深度递归 `$..` 可用，如 `$..content`）；相对地址自动按 host 补全；`contents` 可给文本/歌词（可空）。
+- `type: 2`（官方 schema：0=未设置/1=网络文本/2=听书）或 `type: 4`（真实书源在用）；`ruleContent.playUrl` 提取音频地址（jsonpath 深度递归 `$..` 可用，如 `$..content`）；相对地址自动按 host 补全；`contents` 可给文本/歌词（可空）。
 - playUrl 为空时 App 用正文 URL 与正文 Header（官方规则字段定义）；音频需要请求头时写 `ruleContent.header`。
 - 目录 `chapterUrl` 与小说一致（`api/content?tab=听书&item_id={{itemId}}` 只差业务参数）；搜索/详情/目录结构不因 type 变化。
+
+**规则实现细节（官方实现）**
+
+- **`@tools{fn(...)}` 工具函数**：`timestamp()` / `timestampMs()` / `formatTime(fmt)` / `urlEncode(s)` / `urlDecode(s)` / `base64Encode(s)` / `base64Decode(s)` / `md5(s)` / `sha256(s)` / `uuid()` / `random(min, max)`。在普通字段规则中直接书写；调用失败保留原文。
+- **`${}` V2 表达式求值**：`${pageIndex + 1}`、`${pageIndex * 20}`、`${host + "/api"}`；`${}` 空值保留原文，`@{}` 空值置空。
+- **字段求值顺序**（官方 executor）：基础规则/`@all` → 变量替换 `@get{} → ${} → @{} → @tools{}` → `{{}}` 提取 → `<js>` → `##正则`；`{{}}` 按内容前缀 `{`/`[` 自动选 jsonpath，否则 xpath。
+- **JSONPath 能力**（jsonpath-plus 引擎）：递归 `$..x`、对象值展开 `.*`、切片 `[0:3]`、过滤 `[?(...)]`。
+- **公共 JS 加载顺序**：prototype.js → crypto.min.js → common.js → publicJavascript（CryptoJS 因此恒可用）；V2 JS 超时 30s（V1 120s）。
+- **app.sp.put 值类型**：String/Number/Object/Array/Date/Data；禁 null/undefined/Function；putData 按 siteIdent 隔离、UserDefaults 持久化，JS 写入后可用 `@get{}` 读。
+- **app.get/post 底层**：`OS.get/post(params, cb)` 回调 code 0=成功/401=缺参/402=网络/408=超时；请求参数支持 `timeout`（秒）。
+- **schema 校验要点**：type=0/1/2（4 为真实源听书）；必填最小集 search=url+bookList / chapter=chapterList / content=contents，至少一个规则段；header/cookies 必须对象；未知字段提示；废弃字段 baseUrl/list/name/章节 url/url/lines/encode/imageUrl。
+- **听书 type 值差异**：官方 schema=2，真实源=4，以 App 实际为准（source-check 两者都接受）。
 
 **运行 >1 年的样本实证**
 

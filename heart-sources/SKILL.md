@@ -24,22 +24,24 @@ description: 当用户提到「用心读书」「用心书源」「Read With Hea
 
 ## 字段合同
 
-| 段 | 必填 | 常用可选 |
+| 段 | 必填（官方最小集） | AI 写源建议（不强制） |
 |---|---|---|
-| ruleSearch | url / bookList / bookName / bookUrl | bookAuthor、aliasName、ruleExtra.*、pageMax |
-| ruleBookInfo | （可为空，空则沿用搜索信息） | bookName、bookAuthor、chapterListUrl、toolsUrl、importUrl、ruleExtra.*（coverUrl 兼容旧字段 `imageUrl`） |
-| ruleChapter | chapterList / chapterName / chapterUrl | chapterTime、page、next |
+| ruleSearch | url / bookList | bookName、bookUrl、bookAuthor、aliasName、ruleExtra.*、pageMax |
+| ruleBookInfo | （可为空，空则沿用搜索信息） | bookName、bookAuthor、chapterListUrl、toolsUrl、importUrl、ruleExtra.* |
+| ruleChapter | chapterList | chapterName、chapterUrl、chapterTime、page、next |
 | ruleContent | contents | cleaner、page、next、commentUrl、**playUrl** |
 
-- 听书源（`type: 4`）：`ruleContent.playUrl` **必填**，提取音频地址（jsonpath 可深度递归如 `$..content`；相对地址自动按 host 补全）；`contents` 可给文本/歌词（可空）；音频需要请求头时写在 `ruleContent.header`（官方：playUrl 为空时用正文 URL 与正文 Header）。搜索/详情/目录结构与文本源一致，可用 `request @js:` 改 `config.url/params` 区分音书类型（参考源 `tab_type`）。
+- 官方校验仅要求：search=url+bookList、chapter=chapterList、content=contents，且**至少存在一个规则段**；其余字段（含 bookName/bookUrl/chapterName/chapterUrl）官方不强制。AI 写源仍按建议列写全。
+
+- 听书源：`type` 取 `4`（真实书源在跑）或官方 schema 的 `2`（听书），以 App 实际为准；`ruleContent.playUrl` **必填**，提取音频地址（jsonpath 可深度递归如 `$..content`；相对地址自动按 host 补全）；`contents` 可给文本/歌词（可空）；音频需要请求头时写在 `ruleContent.header`（官方：playUrl 为空时用正文 URL 与正文 Header）。搜索/详情/目录结构与文本源一致，可用 `request @js:` 改 `config.url/params` 区分音书类型（参考源 `tab_type`）。
 
 - `aliasName`：又名/原名；非空时按 `bookName OR aliasName` 匹配并作显示名。
 - 子字段必须相对列表节点：`.//a/text()`、`.//a/@href`。
-- 旧字段禁项：`baseUrl`→`host`；`list`→`chapterList`；`name`→`chapterName`；`lines`→`contents`；`encode`→区分 `requestEncode`/`responseEncode`。
+- 旧字段禁项：`baseUrl`→`host`；`list`→`chapterList`；`name`→`chapterName`；`url`（章节旧名）→`chapterUrl`（等效兼容，优先新名）；`lines`→`contents`；`encode`→区分 `requestEncode`/`responseEncode`；`imageUrl`→`coverUrl`（官方标废弃）。
 
 ## V2 协议硬约束（最易错）
 
-1. **表达式**：`${key}` 未匹配→继续执行 JS；`@{key}` 未匹配→**置空**；`<js>return value;</js>` 字段级后处理（参数 `value`+`config`，**不能用于 request/response**）；`@js:` 仅用于 `request`/`response`（响应参数 `html`+`config`）；`@all` 跳基础解析直接给原文。`##a` 过滤、`##a#b` 替换一次、`##a##b` 全局、`##^.*?id=(\d+).*$##$1` 捕获组。字段流水线：基础提取 → 按原文从左到右执行 `<js>`/`##` 逐步传值；无基础规则时以原文为输入；JS 失败回退上一步结果；正则编译失败保留输入。
+1. **表达式**：`${key}` 未匹配→**保留原文**（且支持 V2 算术/拼接表达式 `${pageIndex + 1}`、`${host + "/api"}`）；`@{key}` 未匹配→**置空**；`<js>return value;</js>` 字段级后处理（参数 `value`+`config`，**不能用于 request/response**）；`@js:` 仅用于 `request`/`response`（响应参数 `html`+`config`）；`@all` 跳基础解析直接给原文；**`@tools{fn(...)}` 工具函数**：`timestamp / timestampMs / formatTime(fmt) / urlEncode / urlDecode / base64Encode / base64Decode / md5 / sha256 / uuid / random(min,max)`。`##a` 过滤、`##a#b` 替换一次、`##a##b` 全局、`##^.*?id=(\d+).*$##$1` 捕获组。执行顺序（官方实现）：基础规则/`@all` → 变量替换 `@get→${}→@{}→@tools` → `{{}}` 提取 → `<js>` → `##正则`；`{{}}` 按内容前缀 `{`/`[` 自动选 jsonpath，否则 xpath。字段级 `<js>`/`##` 也可按原文从左到右逐步传值；JS 失败回退上一步结果；正则编译失败保留输入。
 2. **Header 二选一非合并**：场景 header 非空时公共 `header` 不补入，必须在场景 header 写全所需字段。Cookie 优先级：请求显式 Cookie > `loginCookies` > HTTP 缓存；`forbidCookie:true` 关闭自动注入（显式 Cookie 仍生效）。
 3. **地址传递**：搜索 `bookUrl`→详情 `config.infoUrl`→`config.url`；详情 `chapterListUrl`→章节 `config.bookUrl`→`config.url`（为空回退详情地址）；章节 `chapterUrl`→正文 `config.chapterUrl`→`config.url`。`infoUrl/bookUrl/chapterUrl` 是跨场景上下文地址，改一个不同步其他；`config.url` 只是当前首屏地址。分页：章节 `config.nextUrl` 优先（空用 bookUrl），正文 `config.chapterUrl` 优先（空用 url）；改分页入口只改对应地址字段。`bookUrl`/`chapterUrl` 可只解析 ID，目标场景 `request @js:` 用 `config.infoUrl`/`config.chapterUrl` 重建真实 URL；`request @js:` 内可直接给跨场景字段赋值（如 `config.chapterListUrl = config.infoUrl`）。
 4. **request/response JS**：`request @js:` 改请求配置（可改 `config.url`/`config.host/params/header` 及跨场景地址字段，最终按 `config.host` 补全地址）；`response @js:` 用 `html`+`config` 预处理原始响应；Document 子集 v2.6.0+（`document.select("css")` 数组/`title()`/`attr()`）；规则/响应/前置 JS 可用全局 `get(key)`/`put(key,val)`（见 protocol §1）读写存储，新代码优先 `@get{}`。
@@ -47,7 +49,7 @@ description: 当用户提到「用心读书」「用心书源」「Read With Hea
 6. **toolsUrl / commentUrl（V2）**：支持 直接 URL / 相对 URL / 同步或异步 `@js:`（`await app.get/post`，等待上限 30s，读存储用 `app.sp.get`，无裸 `getValue`）/ URL+尾随 Header / `{url, header}` / `@html:` / `{html, baseURL}`。返回对象 `header` 覆盖场景 header 同名。HTML 模式只保证 Cookie，Auth/UA/Token 不自动用于子资源。
 7. **URL**：相对地址按运行时 `config.host` 自动补全；返回 `#` 或与原文相同视为空地址；图片 URL 附头：`value + ', {"header":{"Referer":"...","User-Agent":"..."}}'`；跨域收集 Cookie：URL 后追加 `{"domains":["a.com","b.org"]}`。
 8. **正文富文本**：格式 `---CATALOG---` 章节标题 + `---CONTENT---` 正文（HTML/CSS/图片/段评/批注）。`<img>` 必须自闭合，网络图/网络 SVG 必须显式 `width`+`height`（否则分页不稳），`ident` 可点击跳 WebView；`src`/`ident` 可尾随 `,{"header":{...}}`（**单引号** JSON，避免与 HTML 双引号冲突；iOS 的 Cookie 头受 `HTTPCookieStorage` 接管，用自定义头验证）。`<comment ident count />`：`count` 须解析为 >0 整数才显示按钮，点击优先于翻页。`<note>` 批注：自闭合、`text` 必填（缺失整标签静默忽略）、remote(默认) 要 `ident`(URL)、manual 要 `id`、`label` 左红块、`autoHeight="true"` 自适应。服务端下发相对路径的段评标签（`ident="/p?para=..."`、`src="/chapter_review/svg..."`）时，书源在 content `<js>` 中拼 host；段评开关可用 openParams + URL 参数（如 `review=1`）控制。
-9. **Native 函数**（App/app/APP 别名等价）：哈希 `md5`/`sha1..sha512`；`base64.encode/decode/decodeToBytes`；`aes.encrypt/decrypt(data,key,iv)`；`rsa.encrypt(data,pub)/decrypt(data,pri)`；`nlp.chs/cht`；`string.toGBK/toUTF8`；`strToBytes/bytesToStr`；`time(unix,'yyyy-MM-dd HH:mm:ss')`；`uuid`；`sp.put/get/delete`；`post/get({url,params,header})`（Promise，必须 `await`，响应含 `responseBody/requestHeader/responseHeader/cookie`）；`socket`；`doc(html,clean)`；`handleError`；`showDialog`；`toast`；`log`。**CryptoJS 运行时内置**（`CryptoJS.AES`/`Base64`/`Hex`/`HMAC` 直接可用，无需导入）。
+9. **Native 函数**（App/app/APP 别名等价，另有底层桥 `OS`/`OSDocument`/`OSSocket`）：哈希 `md5`/`sha1..sha512`；`base64.encode/decode/decodeToBytes`；`aes.encrypt/decrypt(data,key,iv)`；`rsa.encrypt(data,pub)/decrypt(data,pri)`；**`bcrypt.genSalt(rounds)/hash(pwd,salt)`**；`nlp.chs/cht`；`string.toGBK/toUTF8`；`strToBytes/bytesToStr`；`time(unix,'yyyy-MM-dd HH:mm:ss')`；`uuid`；`sp.put/get/delete`（put 支持 String/Number/Object/Array/Date，禁 null/undefined/Function；按 siteIdent 隔离持久化）；**`setTimeout/clearTimeout`**；`post/get({url,params,header,timeout})`（Promise，必须 `await`；底层 code 0 成功/401 缺参/402 网络/408 超时；响应含 `responseBody/requestHeader/responseHeader/cookie`）；`socket(url, protocols, headers)`（`open/text/binary/error/close/push/finished`）；`doc(html,clean)`；`handleError`；`showDialog`；`toast`（type 拼写 `succee`）；`log`。**CryptoJS 内置**（加载顺序 prototype.js→crypto.min.js→common.js→publicJavascript，无需导入）；V2 JS 超时 30s（前置 `@js:` 同样 30s；V1 120s）。
 10. **openParams**：定义 `name/key/value/defaultValue/type(input|single|multiple)/options`；运行时 `config.openParams` 是 `[String:String]` 扁平字典（多选逗号分隔，JS 里 `config.openParams.key` 是字符串不是对象）；写回 `window.ParsingBook.setOpenParamValue(key,v)`/`setOpenParamValues({...})`，HTML 事件用 `@setOpenParams('k','v')`。
 11. **分页**：`page` 并发（URL 页码明确）vs `next` 串行（页面下一页链接）。「下一页」≠「下一章」：next 规则限定链接文本含「下一页/下页/继续阅读」，排除「下一章/下章/返回目录」；URL 形态 `123_2.html`(同章) vs `124.html`(下一章)。
 12. **发现（如用）**：顶层 `ruleFinder` 为数组，每项 `uuid`(分类ID) + `name` + `structure`(URL 模板，支持 `@{_类型}`/`${pageIndex}`) + `list`(筛选器列表 `{type,name,list}`，list 为 `[{name,value}]` JSON 串)；`list` 内再用 `bookList/bookName/bookUrl/bookAuthor` 提取书籍。读筛选当前值用 `config.selectList`(数组，推荐) 或 `config.filters`(字典) 或 `config._<type>`(旧习惯)；候选项 list 不通过 selectList 暴露；筛选项 value 逐项实弹，0 结果的剔除。
