@@ -86,6 +86,8 @@ App 开启 Web API（设置→开发者选项）后可用本地接口自动化�
 - `references/web-api.md` — 本地 Web 写源接口速查（管理 + 调试，ResponsesModel）
 - `references/site-template.full.json` — 全量字段模板
 - `references/practice/gbk-demo-source.json` — GBK 站点实战样本
+- `references/refactor-beautify.md` — 已有书源重构/美化（抽公共 JS、签名等价自测、正文清洗、发现板块合并）
+- `references/convert-from-legado.md` — 阅读/Legado 书源 → RWH 字段/选择器/JS 映射
 
 ## Examples
 
@@ -96,3 +98,5 @@ App 开启 Web API（设置→开发者选项）后可用本地接口自动化�
 - “给这个源的正文加段评/批注/图片”
 - “Web API 怎么保存书源？”
 - “common.js 有哪些函数？”
+- “重构这个用心书源：抽公共 JS、简化字段”
+- “把这个阅读/Legado 书源转成用心书源”

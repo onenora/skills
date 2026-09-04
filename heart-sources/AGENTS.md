@@ -6,7 +6,7 @@
 
 - **SKILL.md 单主文件**：骨架 + 字段合同 + V2 硬约束（表达式/流水线/Header 二选一/Cookie 优先级/地址传递/前置请求 `respones`/toolsUrl·commentUrl/URL 补全/富文本标签/Native/openParams/page·next/发现）+ 验证 + 交付状态。
 - **移除**：references/kb、schema/rules/workflows（并入）、index/site-template/url-patterns/xpath-patterns、`minis://` 与 `/var/minis/`。
-- **保留**：protocol.md、web-api.md、site-template.full.json、practice/gbk-demo-source.json、source-check.py、evals。
+- **保留**：protocol.md、web-api.md、site-template.full.json、practice/gbk-demo-source.json、source-check.py、evals、refactor-beautify.md（重构清单）、convert-from-legado.md（阅读→RWH 映射）。
 
 ## 真实书源验证（2026-08-21，5 源 + App 空模板）
 
