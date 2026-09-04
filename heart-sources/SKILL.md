@@ -67,6 +67,7 @@ description: 当用户提到「用心读书」「用心书源」「Read With Hea
 
 ```bash
 python3 scripts/source-check.py <书源.json>   # 必填字段 + 旧字段 + 引擎/分页警告；退出码 0 PASS / 1 strict-warn / 2 FAIL
+node scripts/heart-verify.js <书源.json> --keyword 关键词   # jsonpath 类源模拟链路（搜索→详情→目录→正文→发现+筛选）；xpath 源走页面样本
 ```
 
 页面样本验证顺序（不可跳级）：单独列表规则 → 列表节点内子字段 → URL 拼接 → 正文节点 → cleaner → next/page。听书源另验：`playUrl` 解析出的音频地址可访问（HTTP 200 / `audio/*`），需要请求头时 `ruleContent.header` 生效。未验证分页必须标注风险。

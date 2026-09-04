@@ -120,7 +120,7 @@ App 生成模板附加字段：`ruleSearch.requestType`(规则类型，默认 0)
 
 - **`{{}}` 规则与字段组合**：字段值可以是 `固定前缀 + {{当前引擎规则}} + <js>`，如实测 `https:{{.//div[@class='book-img-box']/a/img/@src}}<js>return fixCover(value);</js>`（xpath）、`/reader/{{$.itemId}}`（jsonpath）、`//h3/a/@href##\\/\\/www\\.example\\.com\\/`（正则过滤后交给 host 自动补全）。确定替换 `@{}`、`${}`、`{{}}`、`<js>`、`##正则` 可按序写在同一条字段规则里。
 - **字段 XPath 支持函数式写法（XPath 2.0 子集）**：实测 `substring(substring-before(substring-after(./a[@class='chapter-name']/@title, '首发时间：'), ' 章节字数'), 1, 16)` 作 chapterTime。规则中可直接用 `substring/before/after/concat/string-length` 等函数。
-- **JSONPath 特性**：实测递归 `$..content`、对象值展开 `$.data.data.*`、负索引 `$..chapterListWithVolume[0][-1].firstPassTime` 均可用。
+- **JSONPath 特性**（jsonpath-plus 引擎实测）：递归 `$..content`、对象值展开 `$.data.data.*`（等价 `[*]`）、数组通配双展开 `$..chapterListWithVolume[*].*` 均可用；**负索引 `[-1]` 会报错**（jsonpath-plus 不支持），取数组末项用脚本表达式 `[(@.length-1)]`（实测可用）。
 - **CryptoJS 运行时内置**：实测 `CryptoJS.enc.Base64/Hex.parse`、`CryptoJS.AES.decrypt(...)`（CBC/Pkcs7）在规则 JS 直接可用（无需导入）；与 `app.md5` 并存。common.js 仓库的 crypto.min.js 是可选的导入版。
 - **段评注入真实链路**：服务端正文直接下发 `<comment ident="/p?para=...">`、`<img src="/chapter_review/svg?...">` 等**相对路径**标签时，书源负责解析 item_id 并拼 host 前缀（在 content `<js>` 后处理中 replace）；段评开关用 openParams（single）+ 请求 URL 追加 `review=1` 参数控制，`config.openParams` 读值。
 - **多正文源 / 官方+第三方代理模式**：`ruleContent.request @js:` 改 `config.url` 到代理主机（如 base64url 拼接）、并从 `config.openParams.token` 注入 `authorization: Bearer` 头；规则结构不变，换源只影响业务 URL。
